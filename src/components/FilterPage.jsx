@@ -5,6 +5,7 @@ import { useState } from "react";
 const FilterPage = () => {
   const [showMoreFilter, setShowMoreFilter] = useState(false);
   const [values, setValues] = useState({});
+
   const personaliseHandler = () => {
     setShowMoreFilter(true);
   };
@@ -14,7 +15,7 @@ const FilterPage = () => {
       <>
         <div className="bg-white px-6 py-5 rounded-tr-3xl w-4/5 flex  gap-5">
           {personalisedFilter.map((filter) => {
-            const { title, icon, inputType, inputPlaceholder } = filter;
+            const { title, icon, inputType, inputPlaceholder,value } = filter;
             return (
               <div
                 key={title}
@@ -27,6 +28,9 @@ const FilterPage = () => {
                     type={inputType}
                     className="border-none w-full bg-[#EDF4F7]"
                     placeholder={inputPlaceholder}
+                    value={values.value}
+                    name={value}
+                    onChange={valueHandler}
                   />
                 </div>
               </div>
@@ -43,18 +47,21 @@ const FilterPage = () => {
       icon: <GrLocation size={50} />,
       inputType: "select",
       inputPlaceholder: "Water Sport",
+      value:'activity'
     },
     {
       title: "Budget",
       icon: <GrLocation size={50} />,
       inputType: "select",
       inputPlaceholder: "Water Sport",
+      value:'budget'
     },
     {
       title: "Cusines",
       icon: <GrLocation size={50} />,
       inputType: "select",
       inputPlaceholder: "Water Sport",
+      value:"cusines"
     },
   ];
 
@@ -64,27 +71,35 @@ const FilterPage = () => {
       icon: <GrLocation size={50} />,
       inputType: "text",
       inputPlaceholder: "Enter Destination",
+      value:'destination'
     },
     {
       title: "Travel Date",
       icon: <AiOutlineCalendar size={50} />,
       inputType: "date",
       inputPlaceholder: "",
+      value:'date'
     },
     {
       title: "Days",
       icon: <AiOutlineUser size={50} />,
       inputType: "number",
       inputPlaceholder: "Enter Days",
+      value:"numOfDays"
     },
   ];
 
+  const valueHandler = (e) =>{
+    const { name, value} = e.target;
+    setValues((prevState)=> ({...prevState, [name]:value})) 
+  }
+  
   return (
     <div className="flex items-center bg-orange-300 h-screen">
       <div className="mx-auto w-9/12 max-w-4xl gap-1 flex flex-col">
         <div className="bg-white px-6 py-5 rounded-tr-3xl flex justify-evenly gap-2 flex-wrap sm:grid sm:grid-cols-2 lg:flex">
           {mainFilters.map((filter) => {
-            const { title, icon, inputType, inputPlaceholder } = filter;
+            const { title, icon, inputType, inputPlaceholder,value } = filter;
             return (
               <div
                 key={title}
@@ -97,6 +112,9 @@ const FilterPage = () => {
                     type={inputType}
                     className="border-none w-full bg-[#EDF4F7] basis-4"
                     placeholder={inputPlaceholder}
+                    value={values.value}
+                    name={value}
+                    onChange={valueHandler}
                   />
                 </div>
               </div>
