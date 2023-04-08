@@ -1,29 +1,29 @@
-import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/Layout";
-import LandingPage from "../components/LandingPage";
+import { Link, Navigate, createBrowserRouter } from "react-router-dom";
+import Layout from "../layout/Layout";
+import LoginPage from "../components/LoginPage";
 import FilterPage from "../components/FilterPage";
 import Results from "../components/Results";
 
-const router = createBrowserRouter([
-    {
-        path:"/",
-        element:<Layout/>,
-        children:[
-            {
-                path:"/",
-                element:<LandingPage/>
-            },
-            {
-                path:'/filter',
-                element:<FilterPage/>
-            },
-            {
-                path:"/result",
-                element:<Results/>
-            }
-        ]
-
-    }
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <FilterPage />,
+      },
+      {
+        path: "/travelPlan",
+        element: <Results />,
+      }
+    ],
+  },
 ]);
 
-export default router;
+export const unAuthrouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginPage />
+  }
+]);

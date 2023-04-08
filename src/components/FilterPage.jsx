@@ -1,14 +1,34 @@
 import { GrLocation } from "react-icons/gr";
 import { AiOutlineCalendar, AiOutlineUser } from "react-icons/ai";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { getAuth, signOut } from "firebase/auth";
+import { UserContext } from "../store/UserContext";
 
 const FilterPage = () => {
   const [showMoreFilter, setShowMoreFilter] = useState(false);
   const [values, setValues] = useState({});
-
+  const navigate = useNavigate();
+  const { username, usernameHandler } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  console.log(username);
+  
+  // useEffect(()=>{
+  //   if(username == null){
+  //     navigate("/login")
+  //   }
+  //   setIsLoading(false);
+  // },[])
+  
+  // if(isLoading){
+  //   return <h1>Loading</h1>
+  // }
   const personaliseHandler = () => {
     setShowMoreFilter(true);
   };
+
 
   const renderMoreFilter = () => {
     return (
@@ -92,12 +112,32 @@ const FilterPage = () => {
   const valueHandler = (e) =>{
     const { name, value} = e.target;
     setValues((prevState)=> ({...prevState, [name]:value})) 
+  };
+
+  const BuildItineraryHandler = async(e) =>{
+    e.preventDefault();
+    const response = await axios.post("http://localhost:4001/getplan", values);
+    const { choices } = response.data;
+    const  { text } = choices[0];
+   
+    navigate('/travelPlan', {state:{"data":text}})
+  };
+
+  const logoutHandler = () =>{
+    const auth = getAuth();
+    signOut(auth).then(()=>{
+       usernameHandler(null);
+       navigate("/");
+    })
   }
   
   return (
-    <div className="flex items-center bg-orange-300 h-screen">
+    <div className="flex items-center bg-orange-300 h-screen relative">
+      <div className="absolute right-0 top-0 pr-12 py-10">
+          <button onClick={logoutHandler} className="bg-white px-4 py-2 rounded-md font-semibold">Logout</button>
+      </div>
       <div className="mx-auto w-9/12 max-w-4xl gap-1 flex flex-col">
-        <div className="bg-white px-6 py-5 rounded-tr-3xl flex justify-evenly gap-2 flex-wrap sm:grid sm:grid-cols-2 lg:flex">
+        <form  onSubmit={BuildItineraryHandler} className="bg-white px-6 py-5 rounded-tr-3xl flex justify-evenly gap-2 flex-wrap sm:grid sm:grid-cols-2 lg:flex">
           {mainFilters.map((filter) => {
             const { title, icon, inputType, inputPlaceholder,value } = filter;
             return (
@@ -115,6 +155,7 @@ const FilterPage = () => {
                     value={values.value}
                     name={value}
                     onChange={valueHandler}
+                    required
                   />
                 </div>
               </div>
@@ -123,11 +164,11 @@ const FilterPage = () => {
 
           <button
             className="p-5 font-semibold rounded-full bg-[#1B485A] text-white"
-            variant="contained"
+            type="submit"
           >
             Build Itinerary
           </button>
-        </div>
+        </form>
         <>
           {showMoreFilter ? (
             renderMoreFilter()
@@ -148,3 +189,4 @@ const FilterPage = () => {
 };
 
 export default FilterPage;
+
