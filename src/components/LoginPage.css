@@ -1,6 +1,6 @@
 .landing_page{
     height: 100vh;
-    background-image: url("./bg_img.jpg");
+    background-image: url("../assets/bg_img.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
