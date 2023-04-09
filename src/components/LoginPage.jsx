@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from 'react'
-import { useNavigate, redirect } from 'react-router-dom';
+import React, { useContext } from 'react'
 import { GrLogin } from 'react-icons/gr';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { app } from '../config/firebaseConfig';
@@ -10,22 +9,15 @@ import './LoginPage.css';
 const LoginPage = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth(app);
-    const navigate = useNavigate();
-    const {username ,usernameHandler} = useContext(UserContext);
+    const { usernameHandler} = useContext(UserContext);
     
 
     const clickHandler = () =>{
       signInWithPopup(auth, provider)
       .then((result) => {
-      
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        const { displayName } = result.user;
+        usernameHandler(displayName);
     
-        const user = result.user;
-        usernameHandler("rahul");
-        console.log(username);
-        console.log("Rotue to home screen")
-             
       }).catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;

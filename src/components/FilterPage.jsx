@@ -1,10 +1,10 @@
-import { GrLocation } from "react-icons/gr";
-import { AiOutlineCalendar, AiOutlineUser } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getAuth, signOut } from "firebase/auth";
 import { UserContext } from "../store/UserContext";
+
+import { personalisedFilter, mainFilters } from "../constants/filters";
 
 const FilterPage = () => {
   const [showMoreFilter, setShowMoreFilter] = useState(false);
@@ -12,8 +12,6 @@ const FilterPage = () => {
   const navigate = useNavigate();
   const { username, usernameHandler } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
-  
-  console.log(username);
   
   // useEffect(()=>{
   //   if(username == null){
@@ -61,53 +59,7 @@ const FilterPage = () => {
     );
   };
 
-  const personalisedFilter = [
-    {
-      title: "Activity",
-      icon: <GrLocation size={50} />,
-      inputType: "select",
-      inputPlaceholder: "Water Sport",
-      value:'activity'
-    },
-    {
-      title: "Budget",
-      icon: <GrLocation size={50} />,
-      inputType: "select",
-      inputPlaceholder: "Water Sport",
-      value:'budget'
-    },
-    {
-      title: "Cusines",
-      icon: <GrLocation size={50} />,
-      inputType: "select",
-      inputPlaceholder: "Water Sport",
-      value:"cusines"
-    },
-  ];
-
-  const mainFilters = [
-    {
-      title: "Destination",
-      icon: <GrLocation size={50} />,
-      inputType: "text",
-      inputPlaceholder: "Enter Destination",
-      value:'destination'
-    },
-    {
-      title: "Travel Date",
-      icon: <AiOutlineCalendar size={50} />,
-      inputType: "date",
-      inputPlaceholder: "",
-      value:'date'
-    },
-    {
-      title: "Days",
-      icon: <AiOutlineUser size={50} />,
-      inputType: "number",
-      inputPlaceholder: "Enter Days",
-      value:"numOfDays"
-    },
-  ];
+  
 
   const valueHandler = (e) =>{
     const { name, value} = e.target;
@@ -137,6 +89,7 @@ const FilterPage = () => {
           <button onClick={logoutHandler} className="bg-white px-4 py-2 rounded-md font-semibold">Logout</button>
       </div>
       <div className="mx-auto w-9/12 max-w-4xl gap-1 flex flex-col">
+        <h4 className="text-center font-semibold capitalize text-2xl mb-2">{`Hi ${username} 👋`}</h4>
         <form  onSubmit={BuildItineraryHandler} className="bg-white px-6 py-5 rounded-tr-3xl flex justify-evenly gap-2 flex-wrap sm:grid sm:grid-cols-2 lg:flex">
           {mainFilters.map((filter) => {
             const { title, icon, inputType, inputPlaceholder,value } = filter;
