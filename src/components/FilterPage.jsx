@@ -73,9 +73,10 @@ const FilterPage = () => {
     const response = await axios.post("https://travelplanner-apis.onrender.com/getplan", values);
     setIsLoading(false);
     const { choices } = response.data;
-    const  { text } = choices[0];
+    const  { message } = choices[0];
+
    
-    navigate('/travelPlan', {state:{"data":text}})
+    navigate('/travelPlan', {state:{"data":message.content}})
   };
 
   const logoutHandler = () =>{
