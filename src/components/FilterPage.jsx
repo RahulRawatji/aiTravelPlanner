@@ -5,13 +5,14 @@ import { getAuth, signOut } from "firebase/auth";
 import { UserContext } from "../store/UserContext";
 
 import { personalisedFilter, mainFilters } from "../constants/filters";
+import Loading from '../layout/Loading';
 
 const FilterPage = () => {
   const [showMoreFilter, setShowMoreFilter] = useState(false);
   const [values, setValues] = useState({});
   const navigate = useNavigate();
   const { username, usernameHandler } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   // useEffect(()=>{
   //   if(username == null){
@@ -67,8 +68,10 @@ const FilterPage = () => {
   };
 
   const BuildItineraryHandler = async(e) =>{
+    setIsLoading(true);
     e.preventDefault();
     const response = await axios.post("https://travelplanner-apis.onrender.com/getplan", values);
+    setIsLoading(false);
     const { choices } = response.data;
     const  { text } = choices[0];
    
@@ -83,7 +86,7 @@ const FilterPage = () => {
     })
   }
   
-  return (
+  return (isLoading ? <Loading/> : 
     <div className="flex items-center bg-orange-300 h-screen relative">
       <div className="absolute right-0 top-0 pr-12 py-10">
           <button onClick={logoutHandler} className="bg-white px-4 py-2 rounded-md font-semibold">Logout</button>
