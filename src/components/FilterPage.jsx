@@ -68,7 +68,7 @@ const FilterPage = () => {
 
   const BuildItineraryHandler = async(e) =>{
     e.preventDefault();
-    const response = await axios.post("http://localhost:4001/getplan", values);
+    const response = await axios.post("https://travelplanner-apis.onrender.com/getplan", values);
     const { choices } = response.data;
     const  { text } = choices[0];
    
